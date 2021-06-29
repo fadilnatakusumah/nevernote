@@ -1,0 +1,53 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\fadilnatakusumah\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js init -Y
+
+PATH: 
+  C:\Users\fadilnatakusumah\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\fadilnatakusumah\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files\nodejs;C:\Program Files\Git\cmd;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\fadilnatakusumah\AppData\Local\Programs\Python\Python39\Scripts;C:\Users\fadilnatakusumah\AppData\Local\Programs\Python\Python39;C:\Users\fadilnatakusumah\AppData\Local\Microsoft\WindowsApps;C:\Users\fadilnatakusumah\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\fadilnatakusumah\AppData\Roaming\npm;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  16.3.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (C:\Users\fadilnatakusumah\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:136216:13)
+      at Interface.emit (node:events:394:28)
+      at Interface._ttyWrite (node:readline:1069:16)
+      at ReadStream.onkeypress (node:readline:288:10)
+      at ReadStream.emit (node:events:394:28)
+      at emitKeys (node:internal/readline/utils:358:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (node:internal/readline/emitKeypressEvents:61:36)
+      at ReadStream.emit (node:events:394:28)
+      at addChunk (node:internal/streams/readable:312:12)
+
+npm manifest: 
+  {
+     "name": "server",
+     "version": "0.0.1",
+     "description": "Awesome project developed with TypeORM.",
+     "devDependencies": {
+        "ts-node": "3.3.0",
+        "@types/node": "^8.0.29",
+        "typescript": "3.3.3333"
+     },
+     "dependencies": {
+        "typeorm": "0.2.34",
+        "reflect-metadata": "^0.1.10",
+        "mysql": "^2.14.1"
+     },
+     "scripts": {
+        "start": "ts-node src/index.ts"
+     }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
