@@ -1,3 +1,4 @@
+import { Response } from "express";
 import { sign } from "jsonwebtoken";
 import { CONST } from "../constants/strings";
 import { User } from "../entity/User";
@@ -17,10 +18,17 @@ export const generateRefreshToken = (user: User) => {
   return sign(
     {
       userId: user.id,
+      tokenVersion: user.token_version
     },
-    CONST.ACCESS_TOKEN_SECRET,
+    CONST.REFRESH_TOKEN_SECRET,
     {
       expiresIn: "7d",
     }
   );
+};
+
+export const sendRefreshToken = (res: Response, refreshToken: string) => {
+  res.cookie(CONST.JWT_COOKIE, refreshToken, {
+    httpOnly: true,
+  });
 };

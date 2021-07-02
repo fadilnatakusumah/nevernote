@@ -2,6 +2,7 @@ import { compare, hash } from "bcryptjs";
 import {
   generateAccessToken,
   generateRefreshToken,
+  sendRefreshToken,
 } from "../helpers/generateToken";
 import {
   Arg,
@@ -11,14 +12,22 @@ import {
   ObjectType,
   Query,
   Resolver,
+  UseMiddleware,
 } from "type-graphql";
 import { User } from "../entity/User";
 import { Response, Request } from "express";
+import { getConnection } from "typeorm";
+import { verify } from "jsonwebtoken";
 import { CONST } from "../constants/strings";
+import { isAuth } from "../helpers/isAuth";
 
 export interface MyContext {
   res: Response;
   req: Request;
+  tokenPayload?: {
+    userId: string;
+    tokenVersion?: number;
+  };
 }
 
 @ObjectType()
@@ -32,6 +41,20 @@ export class UserResolver {
   @Query(() => String)
   hello() {
     return "Hello WORLD";
+  }
+
+  @Query(() => User, { nullable: true })
+  @UseMiddleware(isAuth)
+  async me(@Ctx() ctx: MyContext) {
+    const payload = ctx.tokenPayload;
+    if (!payload) return null;
+    try {
+      const user = await User.findOne(payload.userId);
+      return user;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
   }
 
   @Mutation(() => Boolean)
@@ -67,9 +90,7 @@ export class UserResolver {
       const accessToken = generateAccessToken(user);
       const refreshToken = generateRefreshToken(user);
 
-      res.cookie(CONST.JWT_COOKIE, refreshToken, {
-        httpOnly: true,
-      });
+      sendRefreshToken(res, refreshToken);
 
       return {
         access_token: accessToken,
@@ -77,5 +98,13 @@ export class UserResolver {
     } catch (error) {
       throw new Error(error);
     }
+  }
+
+  @Mutation(() => Boolean)
+  async revokeUserSession(@Arg("userId") userId: string) {
+    await getConnection()
+      .getRepository(User)
+      .increment({ id: userId! }, "token_version", 1);
+    return true;
   }
 }
