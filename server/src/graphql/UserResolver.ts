@@ -107,4 +107,10 @@ export class UserResolver {
       .increment({ id: userId! }, "token_version", 1);
     return true;
   }
+
+  @Mutation(() => Boolean)
+  async logout(@Ctx() ctx: MyContext) {
+    ctx.res.clearCookie(CONST.JWT_COOKIE);
+    return true;
+  }
 }

@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Link, RouterProps } from "react-router-dom";
+import { Link, Redirect, RouterProps } from "react-router-dom";
 import { GENERICS } from "../components/GlobalStyle";
 import { Wrapper } from "../components/Wrapper";
 import { useLoginMutation } from "../generated/graphql";
+import { isAuthenticated, saveToken } from "../helper/auth";
+import { useRequired } from "../helper/hooks";
 
 export function Login({ history }: RouterProps) {
   const [form, setForm] = useState({
@@ -11,15 +13,21 @@ export function Login({ history }: RouterProps) {
     password: "",
   });
   const [submitLogin, { error, loading }] = useLoginMutation();
+  const { isValid } = useRequired(form);
+
+  if (isAuthenticated()) {
+    return <Redirect to="/" />;
+  }
 
   const onSubmitHander = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     try {
-      await submitLogin({
+      const data = await submitLogin({
         variables: {
           ...form,
         },
       });
+      saveToken(data.data?.login.access_token!);
       history.push("/");
     } catch (error) {
       console.error(error);
@@ -74,7 +82,7 @@ export function Login({ history }: RouterProps) {
               ))}
 
             <div>
-              <button disabled={loading} type="submit">
+              <button disabled={!isValid || loading} type="submit">
                 {loading ? "..." : "Submit"}
               </button>
             </div>
@@ -112,7 +120,7 @@ const FormWrapper = styled("div")`
   }
 
   .right-side {
-    > div:first-child {
+    > div:first-of-type {
       text-align: center;
       img {
         width: 50px;
@@ -142,6 +150,10 @@ const FormWrapper = styled("div")`
           color: white;
           background-color: ${GENERICS.primaryColor};
           padding: 8px 20px;
+
+          &:disabled {
+            background-color: #ccc;
+          }
         }
         small.error-message {
           color: red;

@@ -1,0 +1,14 @@
+mutation AddNote($title: String!, $content: String!) {
+  addNote(content: $content, title: $title) {
+    id
+    title
+    content
+    created_by {
+      id
+      email
+      username
+    }
+    created_at
+    updated_at
+  }
+}

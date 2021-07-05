@@ -58,7 +58,7 @@ createConnection()
       const access_token = generateAccessToken(user);
       sendRefreshToken(res, generateRefreshToken(user));
 
-      return res.send({ success: false, access_token });
+      return res.send({ success: true, access_token });
     });
 
     const apolloServer = new ApolloServer({

@@ -18,7 +18,7 @@ export const generateRefreshToken = (user: User) => {
   return sign(
     {
       userId: user.id,
-      tokenVersion: user.token_version
+      tokenVersion: user.token_version,
     },
     CONST.REFRESH_TOKEN_SECRET,
     {

@@ -4,6 +4,7 @@ import { RouterProps, Link } from "react-router-dom";
 import { GENERICS } from "../components/GlobalStyle";
 import { Wrapper } from "../components/Wrapper";
 import { useSignupMutation } from "../generated/graphql";
+import { useRequired } from "../helper/hooks";
 
 export function Signup({ history }: RouterProps) {
   const [form, setForm] = useState({
@@ -11,6 +12,7 @@ export function Signup({ history }: RouterProps) {
     password: "",
   });
   const [submitSignup, { error, loading }] = useSignupMutation();
+  const { isValid } = useRequired(form);
 
   const onSubmitHander = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -74,7 +76,7 @@ export function Signup({ history }: RouterProps) {
               ))}
 
             <div>
-              <button disabled={loading} type="submit">
+              <button disabled={!isValid || loading} type="submit">
                 {loading ? "..." : "Submit"}
               </button>
             </div>
@@ -112,7 +114,7 @@ const FormWrapper = styled("div")`
   }
 
   .right-side {
-    > div:first-child {
+    > div:first-of-type {
       text-align: center;
       img {
         width: 50px;
@@ -142,6 +144,10 @@ const FormWrapper = styled("div")`
           color: white;
           background-color: ${GENERICS.primaryColor};
           padding: 8px 20px;
+
+          &:disabled {
+            background-color: #ccc;
+          }
         }
         small.error-message {
           color: red;
