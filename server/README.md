@@ -1,7 +1,6 @@
-# Awesome Project Build with TypeORM
+Run `yarn` first
 
-Steps to run this project:
+and then run the backend server with
+`yarn start:db`
 
-1. Run `npm i` command
-2. Run `docker-compose up` command
-3. Run `npm start` command
+and open another terminal and run `yarn start`
