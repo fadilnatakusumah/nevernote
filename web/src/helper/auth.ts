@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { EXPRESS_URL } from "..";
 import { useApolloClient } from "@apollo/client";
 
-const TOKEN = "nevernote-token";
+const TOKEN = process.env.REACT_APP_TOKEN!;
 export const saveToken = (token: string) => storage.setItem(TOKEN, token);
 export const getToken = (): string | null => storage.getItem(TOKEN);
 export const clearToken = () => storage.removeItem(TOKEN);
@@ -44,7 +44,7 @@ export const usePrepareApp = () => {
           setIsLoading(false);
         }
       });
-  }, []);
+  }, [resetStore]);
 
   return { isLoading };
 };

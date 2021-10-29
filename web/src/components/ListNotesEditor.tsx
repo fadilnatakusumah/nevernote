@@ -102,7 +102,7 @@ export function ListNotesEditor() {
     }
 
     onUpdateNoteHandler();
-  }, [noteForm]);
+  }, [selectedNote, noteForm, onUpdateNoteHandler]);
 
   const onSelectNoteHandler = (note: Note) => () => {
     setNoteForm({
@@ -137,7 +137,7 @@ export function ListNotesEditor() {
           {data?.listNotes.map((note) => (
             <div
               key={note.id}
-              className={`note${selectedNote?.id == note.id ? " active" : ""}`}
+              className={`note${selectedNote?.id === note.id ? " active" : ""}`}
               onClick={onSelectNoteHandler(note as any)}
             >
               <div className="note-detail">

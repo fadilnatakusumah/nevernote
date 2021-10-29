@@ -28,8 +28,7 @@
       "typeorm": "0.2.34"
    },
    "scripts": {
-      "start:db": "docker-compose up",
-      "start": "nodemon --exec ts-node src/index.ts"
+      "start": "nodemon -L --exec ts-node src/index.ts"
    },
    "main": "index.js",
    "license": "MIT"

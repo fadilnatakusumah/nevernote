@@ -1,12 +1,6 @@
 import styled from "@emotion/styled";
 import { GENERICS, MIXINS } from "./GlobalStyle";
-import {
-  FaBook,
-  FaChevronDown,
-  FaPlus,
-  FaSearch,
-  FaSignOutAlt,
-} from "react-icons/fa";
+import { FaBook, FaPlus, FaSearch, FaSignOutAlt } from "react-icons/fa";
 import {
   ListNotesDocument,
   useAddNoteMutation,
@@ -71,7 +65,7 @@ export function Navigation() {
 
   useEffect(() => {
     onSearchHandler();
-  }, [searchText]);
+  }, [searchText, onSearchHandler]);
 
   return (
     <NavigationStyled>

@@ -1,37 +1,33 @@
 import styled from "@emotion/styled";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { useForm } from "react-hook-form";
 import { RouterProps, Link } from "react-router-dom";
 import { GENERICS } from "../components/GlobalStyle";
 import { Wrapper } from "../components/Wrapper";
 import { useSignupMutation } from "../generated/graphql";
-import { useRequired } from "../helper/hooks";
+
+type FormData = {
+  email: string;
+  password: string;
+};
 
 export function Signup({ history }: RouterProps) {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
   const [submitSignup, { error, loading }] = useSignupMutation();
-  const { isValid } = useRequired(form);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>();
 
-  const onSubmitHander = async (evt: FormEvent<HTMLFormElement>) => {
-    evt.preventDefault();
+  const onSubmitHander = async (data: FormData) => {
     try {
       await submitSignup({
-        variables: {
-          ...form,
-        },
+        variables: data,
       });
       history.push("/login");
     } catch (error) {
       console.error(error);
     }
   };
-
-  const onChangeHandler =
-    (name: string) =>
-    ({ target }: ChangeEvent<HTMLInputElement>) =>
-      setForm({ ...form, [name]: target.value });
 
   return (
     <Wrapper center={true}>
@@ -50,22 +46,35 @@ export function Signup({ history }: RouterProps) {
             />
             <h2>Nevernote</h2>
           </div>
-          <form onSubmit={onSubmitHander}>
+          <form onSubmit={handleSubmit(onSubmitHander)}>
             <div>
               <input
                 placeholder="Email"
-                value={form.email}
-                onChange={onChangeHandler("email")}
+                type="email"
+                {...register("email", {
+                  required: "Email is required",
+                })}
               />
+              {errors.email && (
+                <p className="text-error">{errors.email.message}</p>
+              )}
             </div>
 
             <div>
               <input
                 type="password"
                 placeholder="Password"
-                value={form.password}
-                onChange={onChangeHandler("password")}
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password should be atleast 6 characters",
+                  },
+                })}
               />
+              {errors.password && (
+                <p className="text-error">{errors.password.message}</p>
+              )}
             </div>
 
             {error &&
@@ -76,7 +85,7 @@ export function Signup({ history }: RouterProps) {
               ))}
 
             <div>
-              <button disabled={!isValid || loading} type="submit">
+              <button disabled={isSubmitting || loading} type="submit">
                 {loading ? "..." : "Submit"}
               </button>
             </div>
@@ -124,6 +133,10 @@ const FormWrapper = styled("div")`
     }
 
     form {
+      .text-error {
+        padding: 5px 0;
+        color: red;
+      }
       div {
         margin-bottom: 10px;
 

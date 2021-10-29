@@ -13,7 +13,7 @@ import App from "./App";
 import { getToken, isAuthenticated, saveToken } from "./helper/auth";
 import reportWebVitals from "./reportWebVitals";
 
-export const EXPRESS_URL = `http://localhost:4000`;
+export const EXPRESS_URL = process.env.REACT_APP_EXPRESS_URL;
 export const GRAPHQL_URL = `${EXPRESS_URL}/graphql`;
 
 const refreshLink = new TokenRefreshLink({

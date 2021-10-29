@@ -1,0 +1,51 @@
+version: '3'
+services:
+  mysql:
+    image: "mysql:5.7.10"
+    ports:
+      - "127.0.0.1:3306:3306"
+    expose: 
+      - 3306
+    env_file: /server/.env
+    environment:
+      MYSQL_ROOT_PASSWORD: $$MYSQL_ROOT_PASSWORD
+      MYSQL_USER: $$MYSQL_USER
+      MYSQL_PASSWORD: $$MYSQL_PASSWORD
+      MYSQL_DATABASE: $$MYSQL_DATABASE
+    restart: unless-stopped
+    networks:
+      - nevernote-app
+    volumes:
+      - mysql-data:/var/lib/mysql
+  server:
+    image: api-server
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./server:/usr/app
+      - /usr/app/node_modules
+    depends_on: 
+      - mysql
+    networks: 
+      - nevernote-app
+    restart: unless-stopped
+    environment:
+      MYSQL_HOST_IP: mysql
+  web:
+    image: react-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./web:/usr/app
+      - /usr/app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+volumes:
+  mysql-data:
+    driver: local
+networks:
+  nevernote-app:
+    driver: bridge
+  
+
