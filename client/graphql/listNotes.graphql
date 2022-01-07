@@ -1,0 +1,14 @@
+query ListNotes($search: String, $orderBy: String) {
+  listNotes(search: $search, orderBy: $orderBy) {
+    id
+    content
+    title
+    created_by {
+      id
+      username
+      email
+    }
+    created_at
+    updated_at
+  }
+}

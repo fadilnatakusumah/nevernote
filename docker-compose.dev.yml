@@ -1,0 +1,20 @@
+version: '3'
+services:
+  mysql:
+    image: "mysql:5.7.10"
+    ports:
+      - "127.0.0.1:3306:3306"
+    expose: 
+      - 3306
+    env_file: server/.env
+    environment:
+      MYSQL_ROOT_PASSWORD: $$MYSQL_ROOT_PASSWORD
+      MYSQL_USER: $$MYSQL_USER
+      MYSQL_PASSWORD: $$MYSQL_PASSWORD
+      MYSQL_DATABASE: $$MYSQL_DATABASE
+    restart: unless-stopped
+    volumes:
+      - mysql-data:/var/lib/mysql
+volumes:
+  mysql-data:
+    driver: local
